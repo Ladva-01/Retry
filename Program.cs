@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Threading.Tasks;
 
-namespace TPLExamples
+namespace RS.Retry
 {
-    class Program
+    static class Program
     {
         static void Main()
         {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TPLExamples
+namespace RS.Retry
 {
     public interface IRetry
     {
@@ -69,15 +69,14 @@ namespace TPLExamples
                 }
                 catch (Exception ex)
                 {
-                    if (!_HandleExcption(ex.GetType()))
-                    {
-                        throw;
-                    }
+                    if (!_HandleExcption(ex.GetType())) { throw; }
                     attempt++;
                     Thread.Sleep(_wait * 1000);
                 }
             }
-            _attemptsExhuasted();
+
+            if (tryCount == attempt)
+                _attemptsExhuasted();
         }
 
         public IRetry Wait(int sec)
@@ -105,7 +104,7 @@ namespace TPLExamples
 
         Task _Run(Action action, int tryCount)
         {
-            var task =  new Task(() => { Run(action, tryCount); });
+            var task = new Task(() => { Run(action, tryCount); });
             task.Start();
             return task;
         }
